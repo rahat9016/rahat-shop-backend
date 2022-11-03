@@ -10,6 +10,7 @@ const UserRouter = require("./src/Routes/User");
 const CategoryRouter = require("./src/Routes/Category");
 const ProductRouter = require("./src/Routes/Product");
 const BrandRouter = require("./src/Routes/Brand");
+const InitialDataRouter = require("./src/Routes/initiateData");
 // Connect with database
 mongoose
   .connect(process.env.DATABASE, {
@@ -39,6 +40,7 @@ app.use("/api", UserRouter);
 app.use("/api", CategoryRouter);
 app.use("/api", ProductRouter);
 app.use("/api", BrandRouter);
+app.use("/api", InitialDataRouter);
 //404 Handler
 app.use((req, res, next) => {
   next("Request URL not found!");

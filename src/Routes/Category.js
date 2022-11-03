@@ -11,6 +11,7 @@ const {
   deleteCategories,
   getCategoryById,
 } = require("../Controller/Admin/Category");
+const Category = require("../Models/Category");
 
 const router = express.Router();
 router.post(

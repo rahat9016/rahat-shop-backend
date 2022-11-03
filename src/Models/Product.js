@@ -48,6 +48,8 @@ const productSchema = new mongoose.Schema(
       },
     ],
     brand: {
+      type: mongoose.Types.ObjectId,
+      ref: "Brand",
       type: String,
       text: true,
     },

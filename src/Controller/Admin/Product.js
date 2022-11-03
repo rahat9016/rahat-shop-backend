@@ -52,18 +52,17 @@ exports.addProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
   const products = await Product.find({})
     .populate("categoryId", "_id title slug parentId")
+    .populate("brand")
     .exec();
   res.status(200).json({ products: products });
 };
 exports.getProductById = async (req, res) => {
-  const p = await Product.findById({ _id: req.params.id }).exec(
-    (error, data) => {
-      if (error) return res.status(400).json({ error });
-      else if (data) {
-        res.status(200).json({ product: data });
-      }
+  await Product.findById({ _id: req.params.id }).exec((error, data) => {
+    if (error) return res.status(400).json({ error });
+    else if (data) {
+      res.status(200).json({ product: data });
     }
-  );
+  });
 };
 // Remove product
 exports.deleteProduct = async (req, res) => {
@@ -109,12 +108,18 @@ exports.updateProduct = async (req, res) => {
     console.log(error);
   }
 };
+exports.productCount = async (req, res) => {
+  let total = await Product.find({}).estimatedDocumentCount().exec();
+  res.status(200).json({ total });
+};
+
 const handleQuery = async (req, res, query, page, perPage) => {
   const currentPage = page || 1;
   // const perPage = 6;
   const products = await Product.find({ $text: { $search: query } })
     .skip((currentPage - 1) * perPage)
     .populate("categoryId")
+    .populate("brand")
     .sort([["createdAt", "desc"]])
     .limit(perPage)
     .exec();
@@ -127,6 +132,7 @@ const handlePaginationProduct = async (req, res, page, perPage) => {
     const products = await Product.find({})
       .skip((currentPage - 1) * perPage)
       .populate("categoryId")
+      .populate("brand")
       .sort([["createdAt", "desc"]])
       .limit(perPage)
       .exec();
@@ -137,14 +143,9 @@ const handlePaginationProduct = async (req, res, page, perPage) => {
 };
 exports.filterProducts = async (req, res) => {
   const { query, page, perPage } = req.body;
-  console.log(query, page);
   if (query) {
     await handleQuery(req, res, query, page, perPage);
   } else {
     await handlePaginationProduct(req, res, page, perPage);
   }
-};
-exports.productCount = async (req, res) => {
-  let total = await Product.find({}).estimatedDocumentCount().exec();
-  res.status(200).json({ total });
 };
