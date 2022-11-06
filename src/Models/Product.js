@@ -28,6 +28,13 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     productPictures: [{ img: { type: String } }],
+    keyFeatures: [
+      {
+        key: {
+          type: String,
+        },
+      },
+    ],
     categoryId: {
       type: mongoose.Types.ObjectId,
       ref: "Category",

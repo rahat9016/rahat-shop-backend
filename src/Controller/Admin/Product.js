@@ -2,10 +2,17 @@ const { default: slugify } = require("slugify");
 const Product = require("../../Models/Product");
 
 exports.addProduct = async (req, res) => {
+  let keyFeature = req.body.keyFeature;
   let productPictures = [];
+  let keyFeatures = [];
   if (req.files.length > 0) {
     productPictures = req.files.map((file) => {
       return { img: process.env.API + "/public/" + file.filename };
+    });
+  }
+  if (keyFeature) {
+    keyFeatures = keyFeature.map((key) => {
+      return { key: key };
     });
   }
   const {
@@ -33,9 +40,9 @@ exports.addProduct = async (req, res) => {
         color,
         shipping,
         createBy: req.user._id,
+        keyFeatures,
       });
       product.save((error, product) => {
-        console.log(error);
         if (error) return res.status(400).json({ error: error });
         if (product) {
           res.status(201).json({
@@ -57,12 +64,14 @@ exports.getAllProducts = async (req, res) => {
   res.status(200).json({ products: products });
 };
 exports.getProductById = async (req, res) => {
-  await Product.findById({ _id: req.params.id }).exec((error, data) => {
-    if (error) return res.status(400).json({ error });
-    else if (data) {
-      res.status(200).json({ product: data });
-    }
-  });
+  await Product.findById({ _id: req.params.id })
+    .populate("brand")
+    .exec((error, data) => {
+      if (error) return res.status(400).json({ error });
+      else if (data) {
+        res.status(200).json({ product: data });
+      }
+    });
 };
 // Remove product
 exports.deleteProduct = async (req, res) => {
@@ -81,7 +90,6 @@ exports.deleteProduct = async (req, res) => {
 };
 
 exports.updateProduct = async (req, res) => {
-  console.log(req.body);
   const id = req.params.id;
   let productPictures = [];
   if (req.files.length > 0 && req.files) {
