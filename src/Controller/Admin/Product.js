@@ -11,7 +11,7 @@ exports.addProduct = async (req, res) => {
     });
   }
   if (keyFeature) {
-    keyFeatures = keyFeature.map((key) => {
+    keyFeatures = keyFeature?.map((key) => {
       return { key: key };
     });
   }
