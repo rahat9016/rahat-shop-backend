@@ -45,13 +45,14 @@ const productSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    review: [
+    reviews: [
       {
-        postBy: {
+        postedBy: {
           type: mongoose.Types.ObjectId,
           ref: "User",
         },
-        review: Number,
+        star: Number,
+        comment: String,
       },
     ],
     brand: {

@@ -1,5 +1,6 @@
 const { default: slugify } = require("slugify");
 const Product = require("../../Models/Product");
+const User = require("../../Models/User");
 
 exports.addProduct = async (req, res) => {
   let keyFeature = req.body.keyFeature;
@@ -119,6 +120,36 @@ exports.updateProduct = async (req, res) => {
 exports.productCount = async (req, res) => {
   let total = await Product.find({}).estimatedDocumentCount().exec();
   res.status(200).json({ total });
+};
+// product review
+exports.productStart = async (req, res) => {
+  const product = await Product.findById(req.params.id).exec();
+  const user = await User.findOne({ email: req.user.email }).exec();
+  const { star } = req.body;
+  let existingRatingObject = product.reviews.find(
+    (ele) => ele.postedBy.toString() === user._id.toString()
+  );
+  if (existingRatingObject === undefined) {
+    let ratingAdded = await Product.findOneAndUpdate(
+      product._id,
+      {
+        $push: { reviews: { star: star, postedBy: user._id } },
+      },
+      { new: true }
+    ).exec();
+    res.json(ratingAdded);
+  } else {
+    const ratingUpdated = await Product.updateOne(
+      { reviews: { $elemMatch: existingRatingObject } },
+      {
+        $set: { "reviews.$.star": star },
+      },
+      {
+        new: true,
+      }
+    ).exec();
+    res.json(ratingUpdated);
+  }
 };
 
 const handleQuery = async (req, res, query, page, perPage) => {

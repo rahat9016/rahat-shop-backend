@@ -3,6 +3,7 @@ const { upload } = require("../Common-middleware/fileUpload");
 const {
   requireSigning,
   adminMiddleware,
+  userMiddleware,
 } = require("../Common-middleware/userMiddleware");
 const {
   addProduct,
@@ -13,6 +14,7 @@ const {
   list,
   productCount,
   filterProducts,
+  productStart,
 } = require("../Controller/Admin/Product");
 
 const router = express.Router();
@@ -42,5 +44,10 @@ router.put(
   upload.array("productPictures"),
   updateProduct
 );
-
+router.put(
+  "/product/start/:productId",
+  requireSigning,
+  userMiddleware,
+  productStart
+);
 module.exports = router;
