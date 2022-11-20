@@ -11,7 +11,6 @@ const {
   deleteProduct,
   getProductById,
   updateProduct,
-  list,
   productCount,
   filterProducts,
   productStart,

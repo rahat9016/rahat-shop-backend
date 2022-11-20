@@ -123,14 +123,15 @@ exports.productCount = async (req, res) => {
 };
 // product review
 exports.productStart = async (req, res) => {
-  const product = await Product.findById(req.params.id).exec();
-  const user = await User.findOne({ email: req.user.email }).exec();
+  const product = await Product.findById(req.params.productId).exec();
+  const user = await User.findOne({ _id: req.user._id }).exec();
   const { star } = req.body;
+  console.log(star);
   let existingRatingObject = product.reviews.find(
     (ele) => ele.postedBy.toString() === user._id.toString()
   );
   if (existingRatingObject === undefined) {
-    let ratingAdded = await Product.findOneAndUpdate(
+    let ratingAdded = await Product.findByIdAndUpdate(
       product._id,
       {
         $push: { reviews: { star: star, postedBy: user._id } },
