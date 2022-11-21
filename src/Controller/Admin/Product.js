@@ -67,12 +67,26 @@ exports.getAllProducts = async (req, res) => {
 exports.getProductById = async (req, res) => {
   await Product.findById({ _id: req.params.id })
     .populate("brand")
+    .populate("reviews.postedBy")
     .exec((error, data) => {
       if (error) return res.status(400).json({ error });
       else if (data) {
         res.status(200).json({ product: data });
       }
     });
+};
+exports.relatedProduct = async (req, res) => {
+  const product = await Product.findById(req.params.productId).exec();
+
+  const related = await Product.find({
+    _id: { $ne: product._id },
+    categoryId: product.categoryId,
+  })
+    .limit(3)
+    .populate("categoryId")
+    .populate("reviews.postedBy")
+    .populate("brand");
+  res.status(200).json(related);
 };
 // Remove product
 exports.deleteProduct = async (req, res) => {
