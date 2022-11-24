@@ -139,7 +139,6 @@ exports.productStart = async (req, res) => {
   const product = await Product.findById(req.params.productId).exec();
   const user = await User.findOne({ _id: req.user._id }).exec();
   const { star } = req.body;
-  console.log(star);
   let existingRatingObject = product.reviews.find(
     (ele) => ele.postedBy.toString() === user._id.toString()
   );

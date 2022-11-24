@@ -2,7 +2,7 @@ const Product = require("../Models/Product");
 
 const handlePrice = async (req, res, price, categoryId) => {
   try {
-    let products = await Product.find({
+    await Product.find({
       $and: [
         { categoryId: categoryId },
         {
@@ -21,11 +21,71 @@ const handlePrice = async (req, res, price, categoryId) => {
       });
   } catch (error) {}
 };
+const handleStar = async (req, res, stars) => {
+  Product.aggregate([
+    {
+      $project: {
+        document: "$$ROOT",
+        floorAverage: {
+          $floor: { $avg: "$reviews.star" },
+        },
+      },
+    },
+    {
+      $match: { floorAverage: stars },
+    },
+  ])
+    .limit(12)
+    .exec((error, aggregate) => {
+      Product.find({ _id: aggregate })
+        .populate("categoryId")
+        .populate("brand")
+        .exec((error, aggregate) => {
+          res.json({ products });
+        });
+    });
+};
+const handleShipping = async (req, res, shipping) => {
+  await Product.find({ shipping })
+    .populate("categoryId")
+    .populate("brand")
+    .limit(12)
+    .exec((error, products) => {
+      res.json({ products });
+    });
+};
+const handleColor = async (req, res, color) => {
+  await Product.find({ color })
+    .populate("categoryId")
+    .populate("brand")
+    .limit(12)
+    .exec((error, products) => {
+      res.json({ products });
+    });
+};
+const handleBrand = async (req, res, brandId) => {
+  await Product.find({ brand: brandId })
+    .populate("categoryId")
+    .populate("brand")
+    .limit(12)
+    .exec((error, products) => {
+      res.json({ products });
+    });
+};
+
 exports.allProducts = async (req, res) => {
-  const { price, byCategoryId } = req.body;
+  const { price, byCategoryId, stars, shipping, color, brand } = req.body;
 
   if (price !== undefined) {
     await handlePrice(req, res, price, byCategoryId);
+  } else if (stars) {
+    await handleStar(req.res, stars);
+  } else if (shipping) {
+    await handleShipping(req, res, shipping);
+  } else if (color) {
+    await handleColor(req, res, color);
+  } else if (brand) {
+    await handleBrand(req, res, brand);
   }
 };
 
