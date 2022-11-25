@@ -21,6 +21,7 @@ const handlePrice = async (req, res, price, categoryId) => {
       });
   } catch (error) {}
 };
+
 const handleStar = async (req, res, stars) => {
   Product.aggregate([
     {
@@ -75,7 +76,6 @@ const handleBrand = async (req, res, brandId) => {
 
 exports.allProducts = async (req, res) => {
   const { price, byCategoryId, stars, shipping, color, brand } = req.body;
-
   if (price !== undefined) {
     await handlePrice(req, res, price, byCategoryId);
   } else if (stars) {
@@ -105,4 +105,17 @@ exports.getProductsByCategoryId = async (req, res) => {
   } catch (error) {
     console.log("error -------->", error);
   }
+};
+exports.getProductBySearch = async (req, res) => {
+  let queryPayload = req.body.query.trim();
+  const search = await Product.find({
+    $text: { $search: queryPayload },
+  })
+    .populate("categoryId")
+    .populate("brand")
+    .exec();
+  // let search = await Product.find({
+  //   name: { $regex: new RegExp("^" + queryPayload + ".*", "i") },
+  // }).exec();
+  res.json({ search });
 };

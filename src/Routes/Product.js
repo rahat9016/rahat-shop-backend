@@ -25,6 +25,7 @@ router.post(
   upload.array("productPictures"),
   addProduct
 );
+
 router.get("/get-all-products", getAllProducts);
 router.get("/product/:id", getProductById);
 router.get("/product/related/:productId", relatedProduct);
