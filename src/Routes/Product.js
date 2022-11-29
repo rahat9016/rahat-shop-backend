@@ -30,7 +30,6 @@ router.get("/get-all-products", getAllProducts);
 router.get("/product/:id", getProductById);
 router.get("/product/related/:productId", relatedProduct);
 router.get("/products/total", productCount);
-// router.post("/products", list);
 router.post("/products", filterProducts);
 
 router.delete(

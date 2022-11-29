@@ -73,10 +73,33 @@ const handleBrand = async (req, res, brandId) => {
       res.json({ products });
     });
 };
-
+const handleBestProduct = async (req, res, sort, order, limit) => {
+  try {
+    await Product.find({})
+      .populate("categoryId")
+      .populate("brand")
+      .sort([[sort, order]])
+      .limit(limit)
+      .exec((error, products) => {
+        res.json({ products });
+      });
+  } catch (error) {}
+};
 exports.allProducts = async (req, res) => {
-  const { price, byCategoryId, stars, shipping, color, brand } = req.body;
-  if (price !== undefined) {
+  const {
+    sort,
+    order,
+    limit,
+    price,
+    byCategoryId,
+    stars,
+    shipping,
+    color,
+    brand,
+  } = req.body;
+  if (sort && order && limit) {
+    await handleBestProduct(req, res, sort, order, limit);
+  } else if (price !== undefined) {
     await handlePrice(req, res, price, byCategoryId);
   } else if (stars) {
     await handleStar(req.res, stars);
@@ -107,15 +130,12 @@ exports.getProductsByCategoryId = async (req, res) => {
   }
 };
 exports.getProductBySearch = async (req, res) => {
-  let queryPayload = req.body.query.trim();
+  let queryPayload = req.body.query;
   const search = await Product.find({
     $text: { $search: queryPayload },
   })
     .populate("categoryId")
     .populate("brand")
     .exec();
-  // let search = await Product.find({
-  //   name: { $regex: new RegExp("^" + queryPayload + ".*", "i") },
-  // }).exec();
   res.json({ search });
 };
