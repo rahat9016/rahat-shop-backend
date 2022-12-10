@@ -68,10 +68,7 @@ exports.getCategory = async (req, res, next) => {
   }
 };
 exports.getCategoryById = async (req, res) => {
-  console.log(req.params);
-  await Product.find({ brand: "Apple" }).exec((error, data) => {
-    console.log(data);
-  });
+  await Product.find({ brand: "Apple" }).exec((error, data) => {});
 };
 exports.updateCategory = async (req, res, next) => {
   const { _id, title, parentId } = req.body;
