@@ -5,11 +5,17 @@ exports.coupon = async (req, res) => {
     const { name, expiry, discount } = req.body;
     const newCoupon = await new Coupon({ name, expiry, discount });
     newCoupon.save((error, data) => {
-      res.status(201).json({ message: "coupon created!" });
+      if (error) {
+        if (error.keyPattern.name > 0) {
+          res.status(400).json({ message: "Already created!" });
+        } else {
+          res.status(400).json(error);
+        }
+      } else if (data) {
+        res.status(201).json({ message: "coupon created!" });
+      }
     });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 exports.getCoupon = async (req, res) => {
   try {
@@ -26,5 +32,19 @@ exports.deleteCoupon = async (req, res) => {
         res.status(200).json({ message: "coupon deleted!" });
       }
     );
+  } catch (error) {}
+};
+exports.applyCouponToUser = async (req, res) => {
+  try {
+    const { coupon, totalAmount } = req.body;
+    const validCoupon = await Coupon.findOne({ name: coupon });
+    if (validCoupon === null) {
+      res.status(400).json({ message: "Invalid coupon" });
+    }
+    const totalAmountAfterDiscount = (
+      totalAmount -
+      (totalAmount * validCoupon.discount) / 100
+    ).toFixed(2);
+    res.status(200).json({ afterDiscount: parseInt(totalAmountAfterDiscount) });
   } catch (error) {}
 };

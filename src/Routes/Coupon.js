@@ -2,11 +2,13 @@ const express = require("express");
 const {
   requireSigning,
   adminMiddleware,
+  userMiddleware,
 } = require("../Common-middleware/userMiddleware");
 const {
   coupon,
   getCoupon,
   deleteCoupon,
+  applyCouponToUser,
 } = require("../Controller/Admin/Coupon");
 const router = express.Router();
 
@@ -18,5 +20,6 @@ router.delete(
   adminMiddleware,
   deleteCoupon
 );
+router.post("/coupon/apply", requireSigning, userMiddleware, applyCouponToUser);
 
 module.exports = router;
