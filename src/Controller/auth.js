@@ -56,7 +56,8 @@ exports.Signing = async (req, res) => {
               expiresIn: "1d",
             }
           );
-          const { _id, firstName, lastName, role, email } = user;
+          const { _id, firstName, lastName, role, email, number } = user;
+
           res.cookie("token", token, { expiresIn: "1d" });
           if (token) {
             res.status(200).json({
@@ -67,6 +68,7 @@ exports.Signing = async (req, res) => {
                 lastName,
                 email,
                 role,
+                number,
               },
             });
           }

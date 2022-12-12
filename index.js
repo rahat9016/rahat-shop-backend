@@ -11,7 +11,6 @@ const CategoryRouter = require("./src/Routes/Category");
 const ProductRouter = require("./src/Routes/Product");
 const BrandRouter = require("./src/Routes/Brand");
 const InitialDataRouter = require("./src/Routes/initiateData");
-const CartRouter = require("./src/Routes/Cart");
 const CouponRouter = require("./src/Routes/Coupon");
 // Connect with database
 mongoose
@@ -43,7 +42,6 @@ app.use("/api", CategoryRouter);
 app.use("/api", ProductRouter);
 app.use("/api", BrandRouter);
 app.use("/api", InitialDataRouter);
-app.use("/api", CartRouter);
 app.use("/api", CouponRouter);
 //404 Handler
 app.use((req, res, next) => {

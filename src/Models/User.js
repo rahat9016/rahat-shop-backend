@@ -43,6 +43,15 @@ const userSchema = new mongoose.Schema(
     profilePicture: {
       type: String,
     },
+    address: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    zone: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
