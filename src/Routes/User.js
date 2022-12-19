@@ -36,6 +36,4 @@ router.post(
   Signing
 );
 
-// User Order
-router.post("/user/order", requireSigning, userMiddleware, createOrder);
 module.exports = router;

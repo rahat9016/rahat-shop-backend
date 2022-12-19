@@ -12,6 +12,9 @@ const ProductRouter = require("./src/Routes/Product");
 const BrandRouter = require("./src/Routes/Brand");
 const InitialDataRouter = require("./src/Routes/initiateData");
 const CouponRouter = require("./src/Routes/Coupon");
+const StripeRouter = require("./src/Routes/stripe");
+const CartRouter = require("./src/Routes/Cart");
+const OrderRouter = require("./src/Routes/Order");
 // Connect with database
 mongoose
   .connect(process.env.DATABASE, {
@@ -43,6 +46,9 @@ app.use("/api", ProductRouter);
 app.use("/api", BrandRouter);
 app.use("/api", InitialDataRouter);
 app.use("/api", CouponRouter);
+app.use("/api", StripeRouter);
+app.use("/api", CartRouter);
+app.use("/api", OrderRouter);
 //404 Handler
 app.use((req, res, next) => {
   next("Request URL not found!");

@@ -4,27 +4,16 @@ const orderSchema = new mongoose.Schema(
   {
     products: [
       {
-        productId: {
-          type: mongoose.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: true,
-        },
-        price: {
-          type: Number,
-        },
+        product: { type: mongoose.Types.ObjectId, ref: "Product" },
+        quantity: { type: Number },
+        price: { type: Number },
       },
     ],
     totalAmount: {
       type: Number,
-      required: true,
     },
     totalAfterDiscount: {
       type: Number,
-      required: true,
     },
     orderBy: {
       type: mongoose.Types.ObjectId,
@@ -34,7 +23,7 @@ const orderSchema = new mongoose.Schema(
     customerInformation: {
       firstName: String,
       lastName: String,
-      mobile: Number,
+      number: Number,
       city: String,
       zone: String,
       fullAddress: String,
