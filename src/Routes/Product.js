@@ -1,5 +1,4 @@
 const express = require("express");
-const { upload } = require("../Common-middleware/fileUpload");
 const {
   requireSigning,
   adminMiddleware,
@@ -22,7 +21,6 @@ router.post(
   "/admin/product/create",
   requireSigning,
   adminMiddleware,
-  upload.array("productPictures"),
   addProduct
 );
 
@@ -42,7 +40,6 @@ router.put(
   "/admin/product/update/:id",
   requireSigning,
   adminMiddleware,
-  upload.array("productPictures"),
   updateProduct
 );
 router.put(

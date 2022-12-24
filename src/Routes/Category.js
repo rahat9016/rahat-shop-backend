@@ -1,5 +1,4 @@
 const express = require("express");
-const { upload } = require("../Common-middleware/fileUpload");
 const {
   requireSigning,
   adminMiddleware,
@@ -11,14 +10,12 @@ const {
   deleteCategories,
   getCategoryById,
 } = require("../Controller/Admin/Category");
-const Category = require("../Models/Category");
 
 const router = express.Router();
 router.post(
   "/admin/category/create",
   requireSigning,
   adminMiddleware,
-  upload.single("categoryImage"),
   addCategory
 );
 router.get("/category/getCategory", getCategory);
@@ -27,7 +24,6 @@ router.post(
   "/admin/category/update",
   requireSigning,
   adminMiddleware,
-  upload.array("categoryImage"),
   updateCategory
 );
 router.post(

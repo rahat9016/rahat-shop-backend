@@ -17,7 +17,7 @@ const brandSchema = new mongoose.Schema(
     brandLogo: {
       type: String,
     },
-    brandCover: [{ img: { type: String } }],
+    brandCover: [{ img: { type: String }, public_id: { type: String } }],
     description: {
       type: String,
     },

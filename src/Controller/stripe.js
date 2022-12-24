@@ -7,11 +7,6 @@ exports.createPayment = async (req, res) => {
   const orderItems = await Order.find({
     $and: [{ _id: req.body.id }, { orderBy: req.user._id }],
   });
-  // console.log(
-  //   "Order Items ----->",
-  //   orderItems[0].totalAfterDiscount,
-  //   orderItems[0].totalAmount
-  // );
   let finalAmount = 0;
   if (orderItems[0].totalAmount > orderItems[0].totalAfterDiscount) {
     finalAmount = orderItems[0].totalAfterDiscount;

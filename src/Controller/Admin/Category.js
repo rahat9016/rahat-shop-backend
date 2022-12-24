@@ -4,17 +4,17 @@ const Category = require("../../Models/Category");
 const Product = require("../../Models/Product");
 
 exports.addCategory = async (req, res) => {
+  const { categoryName, parentId, categoryImg } = req.body;
   try {
     const categoryObj = {
-      title: req.body.title,
-      slug: `${slugify(req.body.title)}-${shortid.generate()}`,
+      title: categoryName,
+      slug: `${slugify(categoryName)}-${shortid.generate()}`,
     };
-    if (req.file) {
-      categoryImgURL = process.env.API + "/public/" + req.file.filename;
-      categoryObj.categoryImg = categoryImgURL;
+    if (categoryImg) {
+      categoryObj.categoryImg = categoryImg.url;
     }
-    if (req.body.parentId) {
-      categoryObj.parentId = req.body.parentId;
+    if (parentId) {
+      categoryObj.parentId = parentId;
     }
     const category = await new Category(categoryObj);
     category.save((error, cat) => {

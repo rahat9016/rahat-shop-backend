@@ -3,26 +3,21 @@ const shortid = require("shortid");
 const Brand = require("../../Models/Brand");
 
 exports.brandCreate = async (req, res) => {
+  const { values, brandLogo, brandCover } = req.body;
   try {
-    let brandCover = [];
+    let brandCovers = [];
     let brandObj = {
-      name: req.body.name,
-      slug: `${slugify(req.body.name)}-${shortid.generate()}`,
-      description: req.body.description,
+      name: values.name,
+      slug: `${slugify(values.name)}-${shortid.generate()}`,
+      description: values.description,
       createBy: req.user._id,
     };
-
-    if (req.files.brandLogo) {
-      req.files.brandLogo.map((file) => {
-        if (file) {
-          const brandLogo = process.env.API + "/public/" + file.filename;
-          brandObj.brandLogo = brandLogo;
-        }
-      });
+    if (brandLogo) {
+      brandObj.brandLogo = brandLogo.url;
     }
-    if (req.files.brandCover) {
-      req.files.brandCover.map((cover) => {
-        brandCover.push({ img: process.env.API + "/public/" + cover.filename });
+    if (brandCover) {
+      brandCover.map((cover) => {
+        brandCovers.push({ img: cover.url, public_id: cover.public_id });
       });
     }
     const brand = await new Brand({ ...brandObj, brandCover });

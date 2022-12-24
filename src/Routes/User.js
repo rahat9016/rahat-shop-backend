@@ -5,7 +5,6 @@ const {
 } = require("../Common-middleware/userMiddleware");
 const { signup, signing, signOut } = require("../Controller/Admin/User");
 const { Signup, Signing } = require("../Controller/auth");
-const { createOrder } = require("../Controller/order");
 const {
   validateSignupRequest,
   isRequestValidate,

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const app = express();
 const path = require("path");
 require("dotenv").config();
-const cors = require("cors");
+var cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const UserRouter = require("./src/Routes/User");
@@ -15,6 +15,7 @@ const CouponRouter = require("./src/Routes/Coupon");
 const StripeRouter = require("./src/Routes/stripe");
 const CartRouter = require("./src/Routes/Cart");
 const OrderRouter = require("./src/Routes/Order");
+const FileUpload = require("./src/Routes/fileUpload");
 // Connect with database
 mongoose
   .connect(process.env.DATABASE, {
@@ -49,6 +50,7 @@ app.use("/api", CouponRouter);
 app.use("/api", StripeRouter);
 app.use("/api", CartRouter);
 app.use("/api", OrderRouter);
+app.use("/api", FileUpload);
 //404 Handler
 app.use((req, res, next) => {
   next("Request URL not found!");

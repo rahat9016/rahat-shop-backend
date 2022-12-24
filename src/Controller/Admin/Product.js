@@ -1,21 +1,22 @@
 const { default: slugify } = require("slugify");
 const Product = require("../../Models/Product");
 const User = require("../../Models/User");
-
 exports.addProduct = async (req, res) => {
-  let keyFeature = req.body.keyFeature;
-  let productPictures = [];
-  let keyFeatures = [];
-  if (req.files.length > 0) {
-    productPictures = req.files.map((file) => {
-      return { img: process.env.API + "/public/" + file.filename };
+  const { keyFeatures, values, productPictures } = req.body;
+
+  let ProductImg = [];
+  let productKeyFeatures = [];
+  if (productPictures) {
+    ProductImg = productPictures.map((file) => {
+      return { url: file.url, public_key: file.public_key };
     });
   }
-  if (keyFeature) {
-    keyFeatures = keyFeature?.map((key) => {
+  if (productKeyFeatures) {
+    productKeyFeatures = keyFeatures.map((key) => {
       return { key: key };
     });
   }
+  console.log(req.body);
   const {
     name,
     quantity,
@@ -25,7 +26,8 @@ exports.addProduct = async (req, res) => {
     brand,
     color,
     shipping,
-  } = req.body;
+  } = values;
+
   try {
     const slug = slugify(name);
     if (name) {
@@ -36,12 +38,12 @@ exports.addProduct = async (req, res) => {
         description,
         price,
         categoryId,
-        productPictures,
+        productPictures: ProductImg,
         brand,
         color,
         shipping,
         createBy: req.user._id,
-        keyFeatures,
+        keyFeatures: productKeyFeatures,
       });
       product.save((error, product) => {
         if (error) return res.status(400).json({ error: error });
