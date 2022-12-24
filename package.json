@@ -19,6 +19,9 @@
     "slugify": "^1.6.5",
     "stripe": "^11.3.0"
   },
+  "engines": {
+    "node": "18.12.1"
+  },
   "scripts": {
     "start": "node index.js",
     "start:dev": "nodemon index.js",
