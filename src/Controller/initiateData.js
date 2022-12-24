@@ -85,7 +85,7 @@ const handleBestProduct = async (req, res, sort, order, limit) => {
       });
   } catch (error) {}
 };
-exports.allProducts = async (req, res) => {
+exports.bestSelling = async (req, res) => {
   const {
     sort,
     order,
@@ -138,4 +138,11 @@ exports.getProductBySearch = async (req, res) => {
     .populate("brand")
     .exec();
   res.json({ search });
+};
+exports.products = async (req, res) => {
+  const products = await Product.find({})
+    .populate("categoryId")
+    .populate("brand")
+    .exec();
+  res.json({ products });
 };

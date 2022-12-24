@@ -1,12 +1,14 @@
 const express = require("express");
 const {
-  allProducts,
   getProductsByCategoryId,
   getProductBySearch,
+  bestSelling,
+  products,
 } = require("../Controller/initiateData");
 const router = express.Router();
 
-router.post("/allProducts", allProducts);
+router.post("/bestSelling", bestSelling);
+router.get("/products", products);
 router.get(
   "/getProductsByCategoryId/:categoryId/:perPage/:page",
   getProductsByCategoryId
